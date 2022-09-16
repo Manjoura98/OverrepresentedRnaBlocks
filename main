@@ -1,0 +1,892 @@
+#Auteurs: Mehdi MANJOURA & Lamia AMMARKHODJA
+
+
+file = input("Saisissez le nom du fichier fasta à traiter:")
+with open(file, "+r") as raw:
+    seqdot = raw.readlines()
+listt = [x.strip() for x in seqdot]
+listt.pop(0)
+
+seq = listt[0]
+texte = listt[1]
+
+texteTemp=texte
+seqTemp=seq
+start_points=[]
+end_points=[]
+listOfAll=[]
+
+# methodes affichage BP
+def AffichageBP0(txt):#...
+    for i in range(0,len(txt)):
+        langueur=len(txt)-i
+        if langueur>5:
+            langueur=5
+        for j in range(1,langueur+1):
+            string="."+str(txt[i:i+j])+"."
+            listOfAll.append(string)
+def AffichageBP1(txt):
+    for i in range(0,len(txt)):
+        langueur=len(txt)-i
+        if langueur>5:
+            langueur=5
+        for j in range(1,langueur+1):
+            listOfAll.append("(."+str(txt[i:i+j])+".)")
+def AffichageBP2(seqFinal,txtFinal,listePosZ_start,listePosZ_end):
+    if len(listePosZ_start)==1:
+        affichage1Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0)
+        affichage1Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0)
+        affichage1zZz(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0)
+    elif len(listePosZ_start)==2:
+
+        affichage1Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0)
+        affichage1Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1)
+        affichage1Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0)
+        affichage1Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1)
+        affichage1zZz(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0)
+        affichage1zZz(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1)
+
+
+        affichage2Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1)
+        affichage2Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1)
+def AffichageBP3(seqFinal,txtFinal,listePosZ_start,listePosZ_end):
+    if len(listePosZ_start)==1:
+        affichage1Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0)
+        affichage1Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0)
+
+
+    elif len(listePosZ_start)==2:
+        affichage1Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0)
+        affichage1Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1)
+        affichage1Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0)
+        affichage1Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1)
+
+        affichage2Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1)
+        affichage2Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1)
+    elif len(listePosZ_start)==3:
+        affichage1Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0)
+        affichage1Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1)
+        affichage1Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,2)
+        affichage1Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0)
+        affichage1Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1)
+        affichage1Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,2)
+
+
+
+
+        affichage2Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1)
+        affichage2Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,2)
+        affichage2Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1,2)
+        affichage2Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1)
+        affichage2Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,2)
+        affichage2Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1,2)
+
+        affichage3Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1,2)
+        affichage3Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1,2)
+def AffichageBP4(seqFinal,txtFinal,listePosZ_start,listePosZ_end):
+    if len(listePosZ_start)==1:
+        affichage1Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0)
+        affichage1Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0)
+    elif len(listePosZ_start)==2:
+        affichage1Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0)
+        affichage1Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1)
+        affichage1Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0)
+        affichage1Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1)
+        affichage2Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1)
+        affichage2Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1)
+    elif len(listePosZ_start)==3:
+        affichage1Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0)
+        affichage1Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1)
+        affichage1Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,2)
+        affichage1Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0)
+        affichage1Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1)
+        affichage1Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,2)
+
+        affichage2Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1)
+        affichage2Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,2)
+        affichage2Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1,2)
+        affichage2Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1)
+        affichage2Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,2)
+        affichage2Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1,2)
+
+        affichage3Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1,2)
+        affichage3Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1,2)
+    elif len(listePosZ_start)==4:
+        affichage1Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0)
+        affichage1Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1)
+        affichage1Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,2)
+        affichage1Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,3)
+        affichage1Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0)
+        affichage1Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1)
+        affichage1Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,2)
+        affichage1Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,3)
+
+        affichage2Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1)
+        affichage2Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,2)
+        affichage2Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,3)
+        affichage2Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1,2)
+        affichage2Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1,3)
+        affichage2Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,2,3)
+        affichage2Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1)
+        affichage2Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,2)
+        affichage2Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,3)
+        affichage2Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1,2)
+        affichage2Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1,3)
+        affichage2Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,2,3)
+
+        affichage3Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1,2)
+        affichage3Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1,3)
+        affichage3Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,2,3)
+        affichage3Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1,2,3)
+        affichage3Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1,2)
+        affichage3Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1,3)
+        affichage3Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,2,3)
+        affichage3Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1,2,3)
+
+        affichage4Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1,2,3)
+        affichage4Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1,2,3)
+def AffichageBP5(seqFinal,txtFinal,listePosZ_start,listePosZ_end):
+    if len(listePosZ_start)==1:
+        affichage1Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0)
+        affichage1Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0)
+    elif len(listePosZ_start)==2:
+        affichage1Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0)
+        affichage1Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1)
+        affichage1Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0)
+        affichage1Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1)
+
+        affichage2Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1)
+        affichage2Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1)
+    elif len(listePosZ_start)==3:
+        affichage1Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0)
+        affichage1Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1)
+        affichage1Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,2)
+        affichage1Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0)
+        affichage1Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1)
+        affichage1Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,2)
+
+        affichage2Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1)
+        affichage2Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,2)
+        affichage2Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1,2)
+        affichage2Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1)
+        affichage2Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,2)
+        affichage2Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1,2)
+
+        affichage3Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1,2)
+        affichage3Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1,2)
+    elif len(listePosZ_start)==4:
+        affichage1Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0)
+        affichage1Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1)
+        affichage1Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,2)
+        affichage1Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,3)
+        affichage1Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0)
+        affichage1Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1)
+        affichage1Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,2)
+        affichage1Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,3)
+
+        affichage2Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1)
+        affichage2Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,2)
+        affichage2Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,3)
+        affichage2Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1,2)
+        affichage2Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1,3)
+        affichage2Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,2,3)
+        affichage2Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1)
+        affichage2Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,2)
+        affichage2Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,3)
+        affichage2Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1,2)
+        affichage2Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1,3)
+        affichage2Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,2,3)
+
+        affichage3Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1,2)
+        affichage3Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1,3)
+        affichage3Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,2,3)
+        affichage3Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1,2,3)
+        affichage3Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1,2)
+        affichage3Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1,3)
+        affichage3Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,2,3)
+        affichage3Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1,2,3)
+
+        affichage4Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1,2,3)
+        affichage4Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1,2,3)
+    elif len(listePosZ_start)==5:
+        affichage1Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0)
+        affichage1Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1)
+        affichage1Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,2)
+        affichage1Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,3)
+        affichage1Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,4)
+        affichage1Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0)
+        affichage1Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1)
+        affichage1Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,2)
+        affichage1Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,3)
+        affichage1Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,4)
+
+
+        affichage2Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1)
+        affichage2Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,2)
+        affichage2Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,3)
+        affichage2Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,4)
+        affichage2Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1,2)
+        affichage2Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1,3)
+        affichage2Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1,4)
+        affichage2Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,2,3)
+        affichage2Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,2,4)
+        affichage2Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,3,4)
+        affichage2Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1)
+        affichage2Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,2)
+        affichage2Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,3)
+        affichage2Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,4)
+        affichage2Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1,2)
+        affichage2Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1,3)
+        affichage2Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1,4)
+        affichage2Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,2,3)
+        affichage2Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,2,4)
+        affichage2Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,3,4)
+
+
+        affichage3Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1,2)
+        affichage3Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1,3)
+        affichage3Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1,4)
+        affichage3Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,2,3)
+        affichage3Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,2,4)
+        affichage3Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,3,4)
+        affichage3Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1,2,3)
+        affichage3Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1,2,4)
+        affichage3Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1,3,4)
+        affichage3Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,2,3,4)
+        affichage3Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1,2)
+        affichage3Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1,3)
+        affichage3Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1,4)
+        affichage3Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,2,3)
+        affichage3Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,2,4)
+        affichage3Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,3,4)
+        affichage3Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1,2,3)
+        affichage3Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1,2,4)
+        affichage3Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1,3,4)
+        affichage3Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,2,3,4)
+
+
+
+        affichage4Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1,2,3)
+        affichage4Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1,2,4)
+        affichage4Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1,2,3,4)
+        affichage4Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1,2,3)
+        affichage4Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,0,1,2,4)
+        affichage4Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1,2,3,4)
+
+        affichage5Z(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1,2,3,4,5)
+        affichage5Y(seqFinal,txtFinal,listePosZ_start,listePosZ_end,1,2,3,4,5)
+
+#les methodes pour afficher BP de "Y"
+def AffichageBP1Y(txt):
+    listOfAll.append("("+str(txt)+")")
+def affichage1Y(sequence,text,listePosZ_start,listePosZ_end,indice1):
+    bpList=[]
+    txt=sequence[listePosZ_start[indice1]:listePosZ_end[indice1]+1]
+    longueur=len(txt)
+    if longueur < 5:
+        string=text[0:listePosZ_start[indice1]]+" "+str(txt)+" "+text[listePosZ_end[indice1]+1:len(sequence)]
+        string=list(string)
+        for dd in range(len(string)-1,0,-1):
+                    #supprimer les points et les espace pour l'affichage
+                    if string[dd]=='.':
+                        string[dd]=''
+        for dd in range(len(string)-1,0,-1):
+                    if string[dd]==' ':
+                        string[dd]=''
+        bpList.append("".join(string))
+        listOfAll.append("".join(string))
+def affichage2Y(sequence,text,listePosZ_start,listePosZ_end,indice1,indice2):
+    bpList=[]
+    txt=sequence[listePosZ_start[indice1]:listePosZ_end[indice1]+1]
+    txt2=sequence[listePosZ_start[indice2]:listePosZ_end[indice2]+1]
+    longueur1=len(txt)
+    longueur2=len(txt2)
+    if longueur1<5 and longueur2<5:
+
+        string=text[0:listePosZ_start[indice1]]+" "+str(txt)+" "+text[listePosZ_end[indice1]+1:listePosZ_start[indice2]]+" "+str(txt2)+" "+text[listePosZ_end[indice2]+1:len(sequence)]
+        string2=list(string)
+        for dd in range(len(string2)-1,0,-1):
+         if string2[dd]=='.':
+            string2[dd]=''
+        for dd in range(len(string2)-1,0,-1):
+         if string2[dd]==' ':
+            string2[dd]=''
+        bpList.append("".join(string2))
+        listOfAll.append("".join(string2))
+def affichage3Y(sequence,text,listePosZ_start,listePosZ_end,indice1,indice2,indice3):
+    bpList=[]
+    txt=sequence[listePosZ_start[indice1]:listePosZ_end[indice1]+1]
+    txt2=sequence[listePosZ_start[indice2]:listePosZ_end[indice2]+1]
+    txt3=sequence[listePosZ_start[indice3]:listePosZ_end[indice3]+1]
+    longueur1=len(txt)
+    longueur2=len(txt2)
+    longueur3=len(txt3)
+
+    if longueur1<4 and longueur2<4 and longueur3<4:
+       string=text[0:listePosZ_start[indice1]]+" "+str(txt)+" "+text[listePosZ_end[indice1]+1:listePosZ_start[indice2]]+" "+str(txt2)+" "+text[listePosZ_end[indice2]+1:listePosZ_start[indice3]]+" "+str(txt3)+" "+text[listePosZ_end[indice3]+1:len(sequence)]
+       string2=list(string)
+       for dd in range(len(string2)-1,0,-1):
+        if string2[dd]=='.':
+            string2[dd]=''
+       for dd in range(len(string2)-1,0,-1):
+        if string2[dd]==' ':
+            string2[dd]=''
+    bpList.append("".join(string2))
+    listOfAll.append("".join(string2))
+def affichage4Y(sequence,text,listePosZ_start,listePosZ_end,indice1,indice2,indice3,indice4):
+    bpList=[]
+    txt=sequence[listePosZ_start[indice1]:listePosZ_end[indice1]+1]
+    txt2=sequence[listePosZ_start[indice2]:listePosZ_end[indice2]+1]
+    txt3=sequence[listePosZ_start[indice3]:listePosZ_end[indice3]+1]
+    txt4=sequence[listePosZ_start[indice4]:listePosZ_end[indice4]+1]
+    longueur1=len(txt)
+    longueur2=len(txt2)
+    longueur3=len(txt3)
+    longueur4=len(txt4)
+    if longueur1<4 and longueur2<4 and longueur3<4 and longueur4<4:
+        string=text[0:listePosZ_start[indice1]]+" "+str(txt)+" "+text[listePosZ_end[indice1]+1:listePosZ_start[indice2]]+" "+str(txt2)+" "+text[listePosZ_end[indice2]+1:listePosZ_start[indice3]]+" "+str(txt3)+" "+text[listePosZ_end[indice3]+1:listePosZ_start[indice4]]+" "+str(txt4)+" "+text[listePosZ_end[indice4]+1:len(sequence)]
+        string2=list(string)
+        for dd in range(len(string2)-1,0,-1):
+            if string2[dd]=='.':
+                string2[dd]=''
+            for dd in range(len(string2)-1,0,-1):
+                if string2[dd]==' ':
+                    string2[dd]=''
+        bpList.append("".join(string2))
+        listOfAll.append("".join(string2))
+def affichage5Y(sequence,text,listePosZ_start,listePosZ_end,indice1,indice2,indice3,indice4,indice5):
+    bpList=[]
+    txt=sequence[listePosZ_start[indice1]:listePosZ_end[indice1]+1]
+    txt2=sequence[listePosZ_start[indice2]:listePosZ_end[indice2]+1]
+    txt3=sequence[listePosZ_start[indice3]:listePosZ_end[indice3]+1]
+    txt4=sequence[listePosZ_start[indice4]:listePosZ_end[indice4]+1]
+    txt5=sequence[listePosZ_start[indice5]:listePosZ_end[indice5]+1]
+    longueur1=len(txt)
+    longueur2=len(txt2)
+    longueur3=len(txt3)
+    longueur4=len(txt4)
+    longueur5=len(txt5)
+    if longueur1<4 and longueur2<4 and longueur3<4 and longueur4<4 and longueur5<4:
+        string=text[0:listePosZ_start[indice1]]+" "+str(txt)+" "+text[listePosZ_end[indice1]+1:listePosZ_start[indice2]]+" "+str(txt2)+" "+text[listePosZ_end[indice2]+1:listePosZ_start[indice3]]+" "+str(txt3)+" "+text[listePosZ_end[indice3]+1:listePosZ_start[indice4]]+" "+str(txt4)+" "+text[listePosZ_end[indice4]+1:listePosZ_start[indice5]]+" "+str(txt5)+" "+text[listePosZ_end[indice5]+1:len(sequence)]
+        string2=list(string)
+        for dd in range(len(string2)-1,0,-1):
+            if string2[dd]=='.':
+                string2[dd]=''
+        for dd in range(len(string2)-1,0,-1):
+            if string2[dd]==' ':
+                string2[dd]=''
+    bpList.append("".join(string2))
+    listOfAll.append("".join(string2))
+
+
+#les méthodes pour Afficher BP de zZz
+def AffichageBP1Z(txt):
+    n=len(txt)
+    listOfAll.append(str(txt[0])+"("+str(txt[1:n-1])+")"+str(txt[n-1]))
+def affichage1zZz(sequence,text,listePosZ_start,listePosZ_end,indice1):
+    bpList=[]
+    txt=sequence[listePosZ_start[indice1]:listePosZ_end[indice1]+1]
+    txt1=sequence[listePosZ_start[indice1]-1]
+    txt2=sequence[listePosZ_end[indice1]+1]
+    longueur=len(txt)
+    test=text[0:listePosZ_start[indice1]]
+    string=str(test)+str(txt1)+str(txt)+str(txt2)
+    string=list(string)
+
+    if longueur < 3:
+
+        string=str(test)+str(txt1)+str(txt)+str(txt2)
+        string=list(string)
+        for dd in range(len(string)-1,0,-1):
+                    #supprimer les points et les espace pour l'affichage
+                    if string[dd]=='.':
+                        string[dd]=''
+        for dd in range(len(string)-1,0,-1):
+                    if string[dd]==' ':
+                        string[dd]=''
+        i=0
+        while i<len(string) and string[i]=='(':
+            i=i+1
+        if string[i] in ["A","G","C","U"]:
+            string=string[i]+"("+str(txt)+"("+str(txt2)+"))"
+        else:
+            string="(("+str(txt1)+")"+str(txt)+")"+str(txt2)
+
+        bpList.append("".join(string))
+        listOfAll.append("".join(string))
+
+# methodes lancement
+
+#ces fonctions permet de lancer la recherche des motifs z selon le type de bp
+
+def lanceBP0():
+    #indices de début et de fin des sous-séquences qui contiennent des points(z)
+    global start_points,end_points
+    start=-1
+    end=-1
+    i=0
+    while i < len(texteTemp):
+        if texteTemp[i] == '.':
+            #récupérer le début dans la variable start
+            start=i
+            while texteTemp[i]=='.':#......
+                if i==len(texteTemp)-1:
+                    i+=1
+                    break
+                else:
+                    i+=1
+            #récupérer la fin dans la variable end
+            end=i
+            i+=1
+        else:
+            i+=1
+        if end!=-1 and start!=-1 :
+            #TODO: affichage resultat
+            AffichageBP0(seqTemp[start:end])
+            start=-1
+            end=-1
+def lanceBP1():
+    global start_points,end_points
+    start=-1
+    end=-1
+    i=0
+    while i < len(texteTemp):
+        if texteTemp[i] == '.' and texteTemp[i-1]=='(':#(.......(
+            start=i
+            while texteTemp[i]=='.':
+                i+=1
+            if texteTemp[i]==')':
+                end=i
+            else:
+                start=-1
+                end=-1
+        else:
+            i+=1
+        if end!=-1 and start!=-1 :
+            #TODO: affichage resultat
+            AffichageBP1(seqTemp[start:end])
+            #code pour la grammaire du "Y"
+            if (end-start) in [2,3,4,5]:
+              AffichageBP1Y(seqTemp[start:end])
+            #code pour la grammaire du "zZz"
+            if (end-start) in [2,3]:
+                AffichageBP1Z(seqTemp[start-1:end+1])
+            #TODO: supprimer resultat (les points qui sont in baisepair pour faciliter la recherche de la base suivante)
+            suprimmer(start+1,end-1)
+            start=-1
+            end=-1
+#les fonctions suivantes vont parcourir la nouvelle dot bracket conclue par la bp précédentes  du dernier élément (sens inverse)
+def lanceBP2():
+    j=len(texteTemp)-1
+    while j>0:
+        start=-1
+        end=-1
+        i=j
+        if texteTemp[i]==')':
+            end=i+1
+            i-=1
+            while texteTemp[i]=='.':
+                i-=1
+            if texteTemp[i]==')' and i>=0:
+                i-=1
+                if texteTemp[i]=='(' and i>=0:
+                    i-=1
+                    while texteTemp[i]=='.':
+                        i-=1
+                    if texteTemp[i]=='(' and i>=0:
+                        start=i
+                        getPositions(texteTemp[start:end])
+                        AffichageBP2(seqTemp[start:end],texteTemp[start:end],start_points,end_points)
+                        suprimmer(start+1,end-1)
+                        break
+        j-=1
+def lanceBP3():
+    filterTexte()
+    j=len(texteTemp)-1
+    while j>0:
+        start=-1
+        end=-1
+        i=j
+        if texteTemp[i]==')':
+            end=i+1
+            i-=1
+            while texteTemp[i]=='.':
+                i-=1
+            if texteTemp[i]==')' and i>=0:
+                i-=1
+                if texteTemp[i]=='(' and i>=0:
+                    i-=1
+                    while texteTemp[i]=='.':
+                        i-=1
+                    if texteTemp[i]==')' and i>=0:
+                        i-=1
+                        if texteTemp[i]=='(' and i>=0:
+                            i-=1
+                            while texteTemp[i]=='.':
+                                i-=1
+                            if texteTemp[i]=='(' and i>=0:
+                                start=i
+                                getPositions(texteTemp[start:end])
+                                AffichageBP3(seqTemp[start:end],texteTemp[start:end],start_points,end_points)
+                                suprimmer(start+1,end-1)
+                                break
+        j-=1
+def lanceBP4():
+    filterTexte()
+    j=len(texteTemp)-1
+    while j>0:
+        start=-1
+        end=-1
+        i=j
+        if texteTemp[i]==')':
+            end=i+1
+            i-=1
+            while texteTemp[i]=='.':
+                i-=1
+            if texteTemp[i]==')' and i>=0:
+                i-=1
+                if texteTemp[i]=='(' and i>=0:
+                    i-=1
+                    while texteTemp[i]=='.':
+                        i-=1
+                    if texteTemp[i]==')' and i>=0:
+                        i-=1
+                        if texteTemp[i]=='(' and i>=0:
+                            i-=1
+                            while texteTemp[i]=='.':
+                                i-=1
+                            if texteTemp[i]==')' and i>=0:
+                                i-=1
+                                if texteTemp[i]=='(' and i>=0:
+                                    i-=1
+                                    while texteTemp[i]=='.':
+                                        i-=1
+                                    if texteTemp[i]=='(' and i>=0:
+                                        start=i
+                                        getPositions(texteTemp[start:end])
+                                        AffichageBP4(seqTemp[start:end],texteTemp[start:end],start_points,end_points)
+                                        suprimmer(start+1,end-1)
+                                        break
+        j-=1
+def lanceBP5():
+    filterTexte()
+    j=len(texteTemp)-1
+    while j>0:
+        start=-1
+        end=-1
+        i=j
+        if texteTemp[i]==')':
+            end=i+1
+            i-=1
+            while texteTemp[i]=='.':
+                i-=1
+            if texteTemp[i]==')' and i>=0:
+                i-=1
+                if texteTemp[i]=='(' and i>=0:
+                    i-=1
+                    while texteTemp[i]=='.':
+                        i-=1
+                    if texteTemp[i]==')' and i>=0:
+                        i-=1
+                        if texteTemp[i]=='(' and i>=0:
+                            i-=1
+                            while texteTemp[i]=='.':
+                                i-=1
+                            if texteTemp[i]==')' and i>=0:
+                                i-=1
+                                if texteTemp[i]=='(' and i>=0:
+                                    i-=1
+                                    while texteTemp[i]=='.':
+                                        i-=1
+                                    if texteTemp[i]==')' and i>=0:
+                                        i-=1
+                                        if texteTemp[i]=='(' and i>=0:
+                                            i-=1
+                                            while texteTemp[i]=='.':
+                                                i-=1
+                                            if texteTemp[i]=='(' and i>=0:
+                                                start=i
+                                                getPositions(texteTemp[start:end])
+                                                AffichageBP5(seqTemp[start:end],texteTemp[start:end],start_points,end_points)
+                                                suprimmer(start+1,end-1)
+                                                break
+        j-=1
+
+    return False
+
+
+# methodes affichage Z
+def affichage1Z(sequence,text,listePosZ_start,listePosZ_end,indice1):
+    bpList=[]
+    txt=sequence[listePosZ_start[indice1]:listePosZ_end[indice1]+1]
+    longueur=len(txt)
+    for i in range(0,len(txt)):
+        langueur=len(txt)-i
+        if langueur>3:
+            langueur=3
+        for j in range(1,langueur+1):
+            string=text[0:listePosZ_start[indice1]]+" "+str(txt[i:i+j])+" "+text[listePosZ_end[indice1]+1:len(sequence)]
+            string2=list(string)
+
+            for dd in range(len(string2)-1,0,-1):
+                if string2[dd]=='.':
+                    string2[dd]=''
+            for dd in range(len(string2)-1,0,-1):
+                if string2[dd]==' ':
+                    string2[dd]='.'
+            bpList.append("".join(string2))
+            listOfAll.append("".join(string2))
+def affichage2Z(sequence,text,listePosZ_start,listePosZ_end,indice1,indice2):
+    bpList=[]
+    txt=sequence[listePosZ_start[indice1]:listePosZ_end[indice1]+1]
+    txt2=sequence[listePosZ_start[indice2]:listePosZ_end[indice2]+1]
+    if (len(txt)+len(txt2))<5:
+        for i in range(0,len(txt)):
+            langueur=len(txt)-i
+            if langueur>3:
+                langueur=3
+            for j in range(1,langueur+1):
+                for ii in range(0,len(txt2)):
+                    langueur2=len(txt2)-ii
+                    if langueur2>3:
+                        langueur2=3
+                    for jj in range(1,langueur2+1):
+                        string=text[0:listePosZ_start[indice1]]+" "+str(txt[i:i+j])+" "+text[listePosZ_end[indice1]+1:listePosZ_start[indice2]]+" "+str(txt2[ii:ii+jj])+" "+text[listePosZ_end[indice2]+1:len(sequence)]
+                        string2=list(string)
+                        for dd in range(len(string2)-1,0,-1):
+                            if string2[dd]=='.':
+                                string2[dd]=''
+                        for dd in range(len(string2)-1,0,-1):
+                            if string2[dd]==' ':
+                                string2[dd]='.'
+                        bpList.append("".join(string2))
+                        listOfAll.append("".join(string2))
+def affichage3Z(sequence,text,listePosZ_start,listePosZ_end,indice1,indice2,indice3):
+    bpList=[]
+    txt=sequence[listePosZ_start[indice1]:listePosZ_end[indice1]+1]
+    txt2=sequence[listePosZ_start[indice2]:listePosZ_end[indice2]+1]
+    txt3=sequence[listePosZ_start[indice3]:listePosZ_end[indice3]+1]
+    if (len(txt)+len(txt2)+len(txt3))<4:
+        for i in range(0,len(txt)):
+            langueur=len(txt)-i
+            if langueur>3:
+                langueur=3
+            for j in range(1,langueur+1):
+                for ii in range(0,len(txt2)):
+                    langueur2=len(txt2)-ii
+                    if langueur2>3:
+                        langueur2=3
+                    for jj in range(1,langueur2+1):
+                        for iii in range(0,len(txt3)):
+                            langueur3=len(txt3)-iii
+                            if langueur3>3:
+                                langueur3=3
+                            for jjj in range(1,langueur3+1):
+                                string=text[0:listePosZ_start[indice1]]+" "+str(txt[i:i+j])+" "+text[listePosZ_end[indice1]+1:listePosZ_start[indice2]]+" "+str(txt2[ii:ii+jj])+" "+text[listePosZ_end[indice2]+1:listePosZ_start[indice3]]+" "+str(txt3[iii:iii+jjj])+" "+text[listePosZ_end[indice3]+1:len(sequence)]
+                                string2=list(string)
+                                for dd in range(len(string2)-1,0,-1):
+                                    if string2[dd]=='.':
+                                        string2[dd]=''
+                                for dd in range(len(string2)-1,0,-1):
+                                    if string2[dd]==' ':
+                                        string2[dd]='.'
+                                bpList.append("".join(string2))
+                                listOfAll.append("".join(string2))
+def affichage4Z(sequence,text,listePosZ_start,listePosZ_end,indice1,indice2,indice3,indice4):
+    bpList=[]
+    txt=sequence[listePosZ_start[indice1]:listePosZ_end[indice1]+1]
+    txt2=sequence[listePosZ_start[indice2]:listePosZ_end[indice2]+1]
+    txt3=sequence[listePosZ_start[indice3]:listePosZ_end[indice3]+1]
+    txt4=sequence[listePosZ_start[indice4]:listePosZ_end[indice4]+1]
+    if (len(txt)+len(txt2)+len(txt3)+len(txt4))<4:
+        for i in range(0,len(txt)):
+            langueur=len(txt)-i
+            if langueur>3:
+                langueur=3
+            for j in range(1,langueur+1):
+                for ii in range(0,len(txt2)):
+                    langueur2=len(txt2)-ii
+                    if langueur2>3:
+                        langueur2=3
+                    for jj in range(1,langueur2+1):
+                        for iii in range(0,len(txt3)):
+                            langueur3=len(txt3)-iii
+                            if langueur3>3:
+                                langueur3=3
+                            for jjj in range(1,langueur3+1):
+                                for iiii in range(0,len(txt4)):
+                                    langueur4=len(txt4)-iiii
+                                    if langueur4>3:
+                                        langueur4=3
+                                    for jjjj in range(1,langueur4+1):
+                                            string=text[0:listePosZ_start[indice1]]+" "+str(txt[i:i+j])+" "+text[listePosZ_end[indice1]+1:listePosZ_start[indice2]]+" "+str(txt2[ii:ii+jj])+" "+text[listePosZ_end[indice2]+1:listePosZ_start[indice3]]+" "+str(txt3[iii:iii+jjj])+" "+text[listePosZ_end[indice3]+1:listePosZ_start[indice4]]+" "+str(txt4[iiii:iiii+jjjj])+" "+text[listePosZ_end[indice4]+1:len(sequence)]
+                                            string2=list(string)
+                                            for dd in range(len(string2)-1,0,-1):
+                                                if string2[dd]=='.':
+                                                    string2[dd]=''
+                                            for dd in range(len(string2)-1,0,-1):
+                                                if string2[dd]==' ':
+                                                    string2[dd]='.'
+                                            bpList.append("".join(string2))
+                                            listOfAll.append("".join(string2))
+def affichage5Z(sequence,text,listePosZ_start,listePosZ_end,indice1,indice2,indice3,indice4,indice5):
+    bpList=[]
+    txt=sequence[listePosZ_start[indice1]:listePosZ_end[indice1]+1]
+    txt2=sequence[listePosZ_start[indice2]:listePosZ_end[indice2]+1]
+    txt3=sequence[listePosZ_start[indice3]:listePosZ_end[indice3]+1]
+    txt4=sequence[listePosZ_start[indice4]:listePosZ_end[indice4]+1]
+    txt5=sequence[listePosZ_start[indice5]:listePosZ_end[indice5]+1]
+
+    for i in range(0,len(txt)):
+        langueur=len(txt)-i
+        if langueur>3:
+            langueur=3
+        for j in range(1,langueur+1):
+            for ii in range(0,len(txt2)):
+                langueur2=len(txt2)-ii
+                if langueur2>3:
+                    langueur2=3
+                for jj in range(1,langueur2+1):
+                    for iii in range(0,len(txt3)):
+                        langueur3=len(txt3)-iii
+                        if langueur3>3:
+                            langueur3=3
+                        for jjj in range(1,langueur3+1):
+                            for iiii in range(0,len(txt4)):
+                                langueur4=len(txt4)-iiii
+                                if langueur4>3:
+                                    langueur4=3
+                                for jjjj in range(1,langueur4+1):
+                                    for iiiii in range(0,len(txt5)):
+                                        langueur5=len(txt5)-iiiii
+                                        if langueur5>3:
+                                            langueur5=3
+                                        for jjjjj in range(1,langueur5+1):
+                                            string=text[0:listePosZ_start[indice1]]+" "+str(txt[i:i+j])+" "+text[listePosZ_end[indice1]+1:listePosZ_start[indice2]]+" "+str(txt2[ii:ii+jj])+" "+text[listePosZ_end[indice2]+1:listePosZ_start[indice3]]+" "+str(txt3[iii:iii+jjj])+" "+text[listePosZ_end[indice3]+1:listePosZ_start[indice4]]+" "+str(txt4[iiii:iiii+jjjj])+" "+text[listePosZ_end[indice4]+1:listePosZ_start[indice5]]+" "+str(txt5[iiiii:iiiii+jjjjj])+" "+text[listePosZ_end[indice5]+1:len(sequence)]
+                                            string2=list(string)
+                                            for dd in range(len(string2)-1,0,-1):
+                                                if string2[dd]=='.':
+                                                    string2[dd]=''
+                                            for dd in range(len(string2)-1,0,-1):
+                                                if string2[dd]==' ':
+                                                    string2[dd]='.'
+                                            bpList.append("".join(string2))
+                                            listOfAll.append("".join(string2))
+
+# autre methodes
+def suprimmer(start,end):
+    global texteTemp,seqTemp
+    texteTemp= texteTemp[0:start]+texteTemp[end:len(texteTemp)]
+    seqTemp= seqTemp[0:start]+seqTemp[end:len(seqTemp)]
+
+def getPositions(partieDeText):
+    global start_points,end_points
+    start_points.clear()
+    end_points.clear()
+    afficher=False
+    for i in range(0,len(partieDeText)):
+        if partieDeText[i]=='.' and afficher==False :
+            start_points.append(i)
+            afficher=True
+        elif partieDeText[i]!='.' and afficher==True:
+            end_points.append(i-1)
+            afficher=False
+    if partieDeText[len(partieDeText)-1]=='.':
+        end_points.append(len(partieDeText)-1)
+
+def filterTexte():
+    global texteTemp,seqTemp
+    test=texteTemp
+
+    getPositions(texteTemp)
+    if texteTemp[len(texteTemp)-1]==')' and texteTemp[len(texteTemp)-2]=='(' and len(seqTemp)>2:
+        texteTemp=texteTemp[0:len(texteTemp)-2]
+        seqTemp=seqTemp[0:start_points[len(start_points)-1]]
+
+    if texteTemp[0]=='.':
+        texteTemp=texteTemp[end_points[0]+1:len(texteTemp)+1]
+        seqTemp=seqTemp[end_points[0]+1:len(seqTemp)+1]
+
+    elif texteTemp[len(texteTemp)-1]=='.':
+        texteTemp=texteTemp[0:start_points[len(start_points)-1]]
+        seqTemp=seqTemp[0:start_points[len(start_points)-1]]
+
+    getPositions(texteTemp)
+    listoftexte=list(texteTemp)
+    listofseq=list(seqTemp)
+
+
+    for i in range(len(start_points)):
+        if texteTemp[start_points[i]-1]=='(' and texteTemp[end_points[i]+1]==')':
+            for j in range(start_points[i],end_points[i]+1):
+                listoftexte[j]=""
+                listofseq[j]=""
+
+    texteTemp="".join(listoftexte)
+    seqTemp="".join(listofseq)
+    listoftexte=list(texteTemp)
+    listofseq=list(seqTemp)
+    i=0
+    while i<len(texteTemp):
+        if texteTemp[i]=='(' and texteTemp[i+1]==')':
+            if texteTemp[i-1]=='(' and texteTemp[i+2]==')':
+                listoftexte=list(texteTemp)
+                listofseq=list(seqTemp)
+                listoftexte[i]=""
+                listofseq[i]=""
+                listoftexte[i+1]=""
+                listofseq[i+1]=""
+                texteTemp="".join(listoftexte)
+                seqTemp="".join(listofseq)
+                i-=1
+            else:
+                i+=1
+        else:
+            i+=1
+    return test==texteTemp
+
+
+
+# main
+
+lanceBP0()
+lanceBP1()
+texteforeTest=""
+while texteforeTest!=texteTemp:
+    texteforeTest=texteTemp
+    lanceBP5()
+    lanceBP4()
+    lanceBP3()
+    lanceBP2()
+newListOfAll=[]
+listOfAll.sort()
+listOfAll.sort(key=len)
+#enregistrement résultats
+with open('tp.orb','w',encoding = 'utf-8') as f:
+    for i in range(len(listOfAll)):
+        if listOfAll[i] not in newListOfAll:
+            newListOfAll.append(listOfAll[i])
+            f.write(listOfAll[i]+"\n")
+
+print("Fichier enregistré! ")
+#Ordonner les résultats
+fich0 = input("Entrez le fichier de résutats (référence publié sur studium)!")
+with open(fich0, "+r") as x:
+    seq1 = x.readlines()
+list2 = [x.strip() for x in seq1]
+
+fich1 = input("Fichier de résultat TP.orb généré par ce code (il est dans ce répértoire!")
+with open(fich1, "+r") as y:
+    seq2 = y.readlines()
+list3 = [y.strip() for y in seq2]
+d = {v:i for i, v in enumerate(list2)}
+r = sorted(list3, key=lambda v: d[v])
+print(list2)
+print(r)
+with open('tpOrdonné.orb','w',encoding = 'utf-8') as f:
+    for i in range(len(r)):
+
+        f.write(r[i]+"\n")
+
+
+Auteurs: Mehdi MANJOURA & Lamia AMMARKHODJA
